@@ -6,28 +6,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.app.academia.controller.AlunoController">
     <children>
-        <Label layoutX="21.0" layoutY="71.0" prefHeight="63.0" prefWidth="197.0" text="Pesquise seu nome:">
-            <font>
-                <Font size="22.0" />
-            </font>
-        </Label>
-        <TextField fx:id="nomePesquisaField" layoutX="226.0" layoutY="80.0" prefHeight="47.0" prefWidth="274.0">
+        <Label layoutX="20.0" layoutY="50.0" prefHeight="30.0" prefWidth="200.0" text="Pesquise seu nome:" textAlignment="RIGHT">
             <font>
                 <Font size="18.0" />
             </font>
+        </Label>
+        <TextField fx:id="nomePesquisaField" layoutX="187.0" layoutY="44.0" prefHeight="41.0" prefWidth="288.0">
+            <font>
+                <Font size="16.0" />
+            </font>
         </TextField>
-        <Label fx:id="exercicioLabel" layoutX="92.0" layoutY="166.0" prefHeight="30.0" prefWidth="480.0" />
-        <Label fx:id="focoLabel" layoutX="92.0" layoutY="217.0" prefHeight="30.0" prefWidth="480.0" />
-        <Label fx:id="tipoLabel" layoutX="92.0" layoutY="253.0" prefHeight="30.0" prefWidth="480.0" />
-        <Label fx:id="duracaoLabel" layoutX="99.0" layoutY="294.0" prefHeight="30.0" prefWidth="480.0" />
-        <Button fx:id="sairButton" layoutX="282.0" layoutY="346.0" mnemonicParsing="false" onAction="#sair" text="Sair" />
-        <Label fx:id="feedbackLabel" layoutX="239.0" layoutY="152.0" prefHeight="18.0" prefWidth="114.0" />
-        <Button fx:id="pesquisarButton" layoutX="513.0" layoutY="90.0" mnemonicParsing="false" onAction="#pesquisarAluno" text="Pesquisar" />
-        <Label fx:id="idadeLabel" layoutX="65.0" layoutY="144.0" prefHeight="18.0" prefWidth="36.0" />
-        <Button fx:id="voltarButton" layoutY="2.0" mnemonicParsing="false" onAction="#voltarParaTelaPrincipal" text="&lt;" />
+        <Button fx:id="pesquisarButton" layoutX="492.0" layoutY="43.0" mnemonicParsing="false" onAction="#pesquisarAluno" prefHeight="42.0" prefWidth="86.0" text="Pesquisar" />
+        <Label fx:id="idadeLabel" layoutX="230.0" layoutY="110.0" prefHeight="30.0" prefWidth="340.0" />
+        <Label fx:id="exercicioLabel" layoutX="230.0" layoutY="150.0" prefHeight="30.0" prefWidth="340.0" />
+        <Label fx:id="focoLabel" layoutX="230.0" layoutY="190.0" prefHeight="30.0" prefWidth="340.0" />
+        <Label fx:id="tipoLabel" layoutX="230.0" layoutY="230.0" prefHeight="30.0" prefWidth="340.0" />
+        <Label fx:id="duracaoLabel" layoutX="230.0" layoutY="270.0" prefHeight="30.0" prefWidth="340.0" />
+        <Button fx:id="voltarButton" layoutX="2.0" layoutY="1.0" mnemonicParsing="false" onAction="#voltarParaTelaPrincipal" prefHeight="30.0" prefWidth="36.0" text="&lt;" />
+        <Button fx:id="sairButton" layoutX="500.0" layoutY="320.0" mnemonicParsing="false" onAction="#limparLabels" text="Sair" />
+        <Label fx:id="feedbackLabel" layoutX="152.0" layoutY="317.0" prefHeight="30.0" prefWidth="340.0" textFill="RED" />
     </children>
 </AnchorPane>
-

@@ -92,6 +92,13 @@ public class PersonalController {
             }
 
         }));
+
+        alunoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                alunoEmEdicao = newValue;
+                exibirDadosAluno();
+            }
+        });
     }
 
     @FXML
@@ -102,7 +109,7 @@ public class PersonalController {
     public void cadastrarAluno() {
         try {
             String nome = nomeCadastroField.getText();
-            int idade = Integer.parseInt(idadeCadastroField.getText()); // Correção aqui
+            int idade = Integer.parseInt(idadeCadastroField.getText());
             String exercicios = exerciciosCadastroField.getText();
             String foco = focoCadastroField.getText();
             String tipo = tipoCadastroField.getText();
@@ -124,7 +131,7 @@ public class PersonalController {
 
             ObservableList<Aluno> alunosAtuais = alunoListView.getItems();
 
-            alunosAtuais.add(novoAluno);  // Atualiza a lista com o novo aluno
+            alunosAtuais.add(novoAluno);
             alunoListView.setItems(alunosAtuais);
 
             feedbackCadastroLabel.setText("Aluno cadastrado com sucesso!");
@@ -137,52 +144,35 @@ public class PersonalController {
         }
     }
 
-
     @FXML
     public void alterarAluno() {
-        try {
-            if (alunoEmEdicao != null) {
-                String nome = nomeEdicaoField.getText();
-                int idade = Integer.parseInt(idadeEdicaoField.getText());
-                String exercicios = exerciciosEdicaoField.getText();
-                String foco = focoEdicaoField.getText();
-                String tipo = tipoEdicaoField.getText();
-                int duracao = Integer.parseInt(duracaoEdicaoField.getText());
+        if (alunoEmEdicao != null) {
+            String nome = nomeEdicaoField.getText();
+            int idade = Integer.parseInt(idadeEdicaoField.getText());
+            String exercicios = exerciciosEdicaoField.getText();
+            String foco = focoEdicaoField.getText();
+            String tipo = tipoEdicaoField.getText();
+            int duracao = Integer.parseInt(duracaoEdicaoField.getText());
 
-                alunoEmEdicao.setNome(nome);
-                alunoEmEdicao.setIdade(idade);
-
-                Treino treino = alunoEmEdicao.getTreino();
-                if (treino == null) {
-                    treino = new Treino(exercicios, foco, tipo, duracao, alunoEmEdicao);
-                    alunoEmEdicao.setTreino(treino);
-                } else {
-                    treino.setExercicio(exercicios);
-                    treino.setFoco(foco);
-                    treino.setTipo(tipo);
-                    treino.setDuracao(duracao);
-                }
-
-                // Atualiza no banco de dados
-                alunoDAO.atualizarAluno(alunoEmEdicao);
-
-                // Atualiza na lista observável
-                ObservableList<Aluno> alunos = alunoListView.getItems();
-                int index = alunos.indexOf(alunoEmEdicao);
-                if (index != -1) {
-                    alunos.set(index, alunoEmEdicao);
-                }
-
-                feedbackEdicaoLabel.setText("Aluno/treino alterados com sucesso!");
-                feedbackEdicaoLabel.setStyle("-fx-text-fill: blue;");
-                limparCamposEdicao();
-                alunoEmEdicao = null;
-            } else {
-                feedbackEdicaoLabel.setText("Erro: Nenhum aluno selecionado para editar.");
-                feedbackEdicaoLabel.setStyle("-fx-text-fill: red;");
+            alunoEmEdicao.setNome(nome);
+            alunoEmEdicao.setIdade(idade);
+            Treino treino = alunoEmEdicao.getTreino();
+            if (treino != null) {
+                treino.setExercicio(exercicios);
+                treino.setFoco(foco);
+                treino.setTipo(tipo);
+                treino.setDuracao(duracao);
             }
-        } catch (NumberFormatException e) {
-            feedbackEdicaoLabel.setText("Erro: Preencha todos os campos corretamente.");
+
+            alunoDAO.atualizarAluno(alunoEmEdicao);
+
+            alunoListView.refresh();
+            limparCamposEdicao();
+
+            feedbackEdicaoLabel.setText("Aluno alterado com sucesso!");
+            feedbackEdicaoLabel.setStyle("-fx-text-fill: blue;");
+        } else {
+            feedbackEdicaoLabel.setText("Erro: Nenhum aluno selecionado para alterar.");
             feedbackEdicaoLabel.setStyle("-fx-text-fill: red;");
         }
     }
@@ -193,7 +183,6 @@ public class PersonalController {
         Aluno alunoSelecionado = alunoListView.getSelectionModel().getSelectedItem();
 
         if (alunoSelecionado != null) {
-            // Confirmar exclusão com o usuário (opcional)
             Alert confirmacao = new Alert(Alert.AlertType.CONFIRMATION);
             confirmacao.setTitle("Confirmação de exclusão");
             confirmacao.setHeaderText("Deseja realmente excluir o aluno selecionado?");
@@ -201,10 +190,7 @@ public class PersonalController {
 
             Optional<ButtonType> resultado = confirmacao.showAndWait();
             if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                // Excluir do banco de dados
                 alunoDAO.excluirAluno(alunoSelecionado.getId());
-
-                // Remover da lista observável
                 alunoListView.getItems().remove(alunoSelecionado);
 
                 feedbackEdicaoLabel.setText("Aluno e treino excluídos com sucesso!");
@@ -218,19 +204,15 @@ public class PersonalController {
 
     @FXML
     public void exibirDadosAluno() {
-        String nomeSelecionado = "oi";
-        if (nomeSelecionado != null) {
-
-            if (alunoEmEdicao != null) {
-                nomeEdicaoField.setText(alunoEmEdicao.getNome());
-                idadeEdicaoField.setText(String.valueOf(alunoEmEdicao.getIdade())); // Modificação aqui
-                Treino treino = alunoEmEdicao.getTreino();
-                if (treino != null) {
-                    exerciciosEdicaoField.setText(treino.getExercicio());
-                    focoEdicaoField.setText(treino.getFoco());
-                    tipoEdicaoField.setText(treino.getTipo());
-                    duracaoEdicaoField.setText(String.valueOf(treino.getDuracao()));
-                }
+        if (alunoEmEdicao != null) {
+            nomeEdicaoField.setText(alunoEmEdicao.getNome());
+            idadeEdicaoField.setText(String.valueOf(alunoEmEdicao.getIdade()));
+            Treino treino = alunoEmEdicao.getTreino();
+            if (treino != null) {
+                exerciciosEdicaoField.setText(treino.getExercicio());
+                focoEdicaoField.setText(treino.getFoco());
+                tipoEdicaoField.setText(treino.getTipo());
+                duracaoEdicaoField.setText(String.valueOf(treino.getDuracao()));
             }
         }
     }

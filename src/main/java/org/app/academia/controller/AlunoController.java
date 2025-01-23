@@ -1,12 +1,15 @@
 package org.app.academia.controller;
 
 import org.app.academia.model.Aluno;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.app.academia.model.AlunoDAO;
+import org.app.academia.model.Treino;
+
+import java.util.Optional;
 
 public class AlunoController {
     @FXML
@@ -32,13 +35,7 @@ public class AlunoController {
     @FXML
     private Button voltarButton;
 
-    private ObservableList<Aluno> todosAlunos;
     private AcademiaController academiaController = new AcademiaController();
-
-    public void initialize() {
-        todosAlunos = FXCollections.observableArrayList();
-        resetInterface();
-    }
 
     @FXML
     public void voltarParaTelaPrincipal() {
@@ -47,36 +44,55 @@ public class AlunoController {
 
     @FXML
     public void pesquisarAluno() {
-        String nomeFiltro = nomePesquisaField.getText().trim().toLowerCase();
+        // Limpa os campos antes de buscar
+        limparLabels();
 
-        if (!nomeFiltro.isEmpty()) {
-            Aluno alunoEncontrado = todosAlunos.stream()
-                    .filter(aluno -> aluno.getNome().toLowerCase().equals(nomeFiltro))
-                    .findFirst()
-                    .orElse(null);
+        String nomePesquisado = nomePesquisaField.getText().trim();
 
-            if (alunoEncontrado != null) {
-                // Exibe os dados do aluno e treino
-                feedbackLabel.setText(""); // Remove mensagens gerais
-                idadeLabel.setText("Idade: " + alunoEncontrado.getIdade());
-                exercicioLabel.setText("Exercício: " + alunoEncontrado.getTreino().getExercicio());
-                focoLabel.setText("Foco: " + alunoEncontrado.getTreino().getFoco());
-                tipoLabel.setText("Tipo: " + alunoEncontrado.getTreino().getTipo());
-                duracaoLabel.setText("Duração: " + alunoEncontrado.getTreino().getDuracao() + " dias");
+        if (nomePesquisado.isEmpty()) {
+            feedbackLabel.setText("Por favor, insira o nome para pesquisa.");
+            feedbackLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
 
-            } else {
-                // Aluno não encontrado
-                resetInterface();
-                feedbackLabel.setText("Aluno não encontrado.");
-            }
+        AlunoDAO alunoDAO = new AlunoDAO();
+        ObservableList<Aluno> alunos = alunoDAO.buscarTodosAlunos();
+
+        Optional<Aluno> alunoEncontrado = alunos.stream()
+                .filter(aluno -> aluno.getNome().equalsIgnoreCase(nomePesquisado))
+                .findFirst();
+
+        if (alunoEncontrado.isPresent()) {
+            Aluno aluno = alunoEncontrado.get();
+            exibirDadosAluno(aluno);
+            feedbackLabel.setText("Aluno encontrado!");
+            feedbackLabel.setStyle("-fx-text-fill: blue;");
         } else {
-            // Se o campo estiver vazio
-            resetInterface();
-            feedbackLabel.setText("Digite o nome do aluno.");
+            feedbackLabel.setText("Aluno não encontrado.");
+            feedbackLabel.setStyle("-fx-text-fill: red;");
         }
     }
 
-    private void resetInterface() {
+    private void exibirDadosAluno(Aluno aluno) {
+        idadeLabel.setText("Idade: " + aluno.getIdade());
+
+        Treino treino = aluno.getTreino();
+        if (treino != null) {
+            exercicioLabel.setText("Exercício: " + treino.getExercicio());
+            focoLabel.setText("Foco: " + treino.getFoco());
+            tipoLabel.setText("Tipo: " + treino.getTipo());
+            duracaoLabel.setText("Duração: " + treino.getDuracao() + " dias");
+        } else {
+            exercicioLabel.setText("Exercício: Não informado");
+            focoLabel.setText("Foco: Não informado");
+            tipoLabel.setText("Tipo: Não informado");
+            duracaoLabel.setText("Duração: Não informada");
+        }
+    }
+
+    @FXML
+    private void limparLabels() {
+        feedbackLabel.setText("");
         idadeLabel.setText("");
         exercicioLabel.setText("");
         focoLabel.setText("");
@@ -84,9 +100,5 @@ public class AlunoController {
         duracaoLabel.setText("");
     }
 
-    public void sair() {
-        resetInterface();
-        nomePesquisaField.clear(); //
-    }
 
 }

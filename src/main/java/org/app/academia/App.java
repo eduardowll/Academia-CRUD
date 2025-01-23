@@ -12,8 +12,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        var fxmlPath = App.class.getResource("/org/app/academia/fxml/TelaMain.fxml");
-        System.out.println("FXML Path: " + fxmlPath);
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/org/app/academia/fxml/TelaMain.fxml"));
         primaryStage.setTitle("Academia");
         primaryStage.setScene(new Scene(loader.load()));
@@ -21,7 +19,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println(App.class.getResource("/org/app/academia/fxml/TelaMain.fxml"));
         launch(args);
     }
 }

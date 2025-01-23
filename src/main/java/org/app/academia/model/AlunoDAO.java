@@ -10,9 +10,8 @@ public class AlunoDAO {
         Connection conn = null;
         try {
             conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false);  // Desativa o commit automático para a transação
+            conn.setAutoCommit(false);
 
-            // Inserir o aluno
             String sqlAluno = "INSERT INTO alunos (nome, idade) VALUES (?, ?) RETURNING alunos_id";
             try (PreparedStatement stmtAluno = conn.prepareStatement(sqlAluno)) {
                 stmtAluno.setString(1, aluno.getNome());
@@ -22,7 +21,6 @@ public class AlunoDAO {
                 if (rsAluno.next()) {
                     int alunoId = rsAluno.getInt("alunos_id");
 
-                    // Inserir o treino associado ao aluno
                     String sqlTreino = "INSERT INTO treino (exercicios, foco, tipo, duracao, alunos_id) VALUES (?, ?, ?, ?, ?)";
                     try (PreparedStatement stmtTreino = conn.prepareStatement(sqlTreino)) {
                         stmtTreino.setString(1, treino.getExercicio());
@@ -66,13 +64,11 @@ public class AlunoDAO {
              PreparedStatement stmtAluno = conn.prepareStatement(updateAlunoSQL);
              PreparedStatement stmtTreino = conn.prepareStatement(updateTreinoSQL)) {
 
-            // Atualiza os dados do aluno
             stmtAluno.setString(1, aluno.getNome());
             stmtAluno.setInt(2, aluno.getIdade());
             stmtAluno.setInt(3, aluno.getId());
             stmtAluno.executeUpdate();
 
-            // Atualiza os dados do treino associado
             Treino treino = aluno.getTreino();
             if (treino != null) {
                 stmtTreino.setString(1, treino.getExercicio());
@@ -90,8 +86,6 @@ public class AlunoDAO {
         }
     }
 
-
-
     public void excluirAluno(int alunoId) {
         String deleteTreinoSQL = "DELETE FROM treino WHERE alunos_id = ?";
         String deleteAlunoSQL = "DELETE FROM alunos WHERE alunos_id = ?";
@@ -100,11 +94,9 @@ public class AlunoDAO {
              PreparedStatement stmtTreino = conn.prepareStatement(deleteTreinoSQL);
              PreparedStatement stmtAluno = conn.prepareStatement(deleteAlunoSQL)) {
 
-            // Excluir o treino associado ao aluno
             stmtTreino.setInt(1, alunoId);
             stmtTreino.executeUpdate();
 
-            // Excluir o aluno
             stmtAluno.setInt(1, alunoId);
             stmtAluno.executeUpdate();
 
@@ -135,13 +127,11 @@ public class AlunoDAO {
                 String tipo = rs.getString("tipo");
                 int duracao = rs.getInt("duracao");
 
-                // Cria um objeto Aluno com os dados recuperados
                 Aluno aluno = new Aluno();
                 aluno.setId(id);
                 aluno.setNome(nome);
                 aluno.setIdade(idade);
 
-                // Cria o objeto Treino associado ao aluno
                 Treino treino = new Treino();
                 treino.setExercicio(exercicios);
                 treino.setFoco(foco);

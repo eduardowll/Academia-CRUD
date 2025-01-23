@@ -22,8 +22,8 @@ public class AcademiaController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/app/academia/fxml/TelaMain.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) button.getScene().getWindow(); // Obtém a janela atual
-            stage.setScene(new Scene(root)); // Define a nova cena
+            Stage stage = (Stage) button.getScene().getWindow();
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,8 +36,8 @@ public class AcademiaController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/app/academia/fxml/TelaAluno.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) alunoButton.getScene().getWindow(); // Obtém a janela atual
-            stage.setScene(new Scene(root)); // Define a nova cena
+            Stage stage = (Stage) alunoButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

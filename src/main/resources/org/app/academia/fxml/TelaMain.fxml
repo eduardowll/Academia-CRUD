@@ -2,12 +2,25 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" fx:controller="org.app.academia.controller.AcademiaController" xmlns:fx="http://javafx.com/fxml">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="org.app.academia.controller.AcademiaController">
     <children>
-        <Label layoutX="229.0" layoutY="101.0" text="Você é Aluno ou Personal?" />
-        <Button fx:id="alunoButton" layoutX="121.0" layoutY="187.0" mnemonicParsing="false" onAction="#irParaTelaAluno" text="Aluno" />
-        <Button fx:id="personalButton" layoutX="404.0" layoutY="187.0" mnemonicParsing="false" onAction="#irParaTelaPersonal" text="Personal" />
+        <Label layoutX="91.0" layoutY="140.0" prefHeight="35.0" prefWidth="417.0" text="Bem vindo a Academia Funcional E. R.!">
+         <font>
+            <Font size="24.0" />
+         </font></Label>
+        <Button fx:id="alunoButton" layoutX="112.0" layoutY="234.0" mnemonicParsing="false" onAction="#irParaTelaAluno" prefHeight="41.0" prefWidth="78.0" text="Aluno" textFill="#3e00fa" />
+        <Button fx:id="personalButton" layoutX="414.0" layoutY="234.0" mnemonicParsing="false" onAction="#irParaTelaPersonal" prefHeight="42.0" prefWidth="78.0" text="Personal" textFill="RED" />
+      <Label layoutX="204.0" layoutY="357.0" text="Feito por Eduardo Jacinto Rodrigues" />
+      <Label layoutX="233.0" layoutY="207.0" text="Você é aluno ou personal?" />
+      <ImageView fitHeight="114.0" fitWidth="166.0" layoutX="220.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/logoacademia.jpg" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>
